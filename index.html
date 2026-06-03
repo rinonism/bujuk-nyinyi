@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maaf Ya... 🐱</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e8eaf6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .cat-container {
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .cat {
+            font-size: 120px;
+            line-height: 1;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+        }
+
+        .message {
+            font-size: 1.4rem;
+            color: #4a4a4a;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-weight: 500;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-light {
+            background: linear-gradient(135deg, #fff9c4, #fff176);
+            color: #5d4037;
+            box-shadow: 0 4px 15px rgba(255,241,118,0.4);
+        }
+
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,241,118,0.6);
+        }
+
+        .btn-medium {
+            background: linear-gradient(135deg, #ffccbc, #ff8a65);
+            color: #bf360c;
+            box-shadow: 0 4px 15px rgba(255,138,101,0.4);
+        }
+
+        .btn-medium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,138,101,0.6);
+        }
+
+        .btn-heavy {
+            background: linear-gradient(135deg, #ef9a9a, #e53935);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(229,57,53,0.4);
+        }
+
+        .btn-heavy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(229,57,53,0.6);
+        }
+
+        /* Response screen */
+        .response {
+            display: none;
+            text-align: center;
+        }
+
+        .response .cat {
+            animation: shake 0.5s ease;
+        }
+
+        .response-text {
+            font-size: 1.3rem;
+            color: #4a4a4a;
+            line-height: 1.7;
+            margin-top: 1.5rem;
+            font-weight: 500;
+        }
+
+        .response-text .highlight {
+            color: #e91e63;
+            font-weight: 700;
+        }
+
+        .next-btn {
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #ce93d8, #ab47bc);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(171,71,188,0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(171,71,188,0.6);
+        }
+
+        /* Floating hearts background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -20px;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            animation: rise linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <!-- Main screen -->
+        <div class="main-screen" id="mainScreen">
+            <div class="cat-container">
+                <div class="cat">🐱</div>
+            </div>
+            <p class="message">Aku tau aku salah...<br>Seberapa kesel kamu sama aku hari ini?</p>
+            <div class="buttons">
+                <button class="btn btn-light" onclick="selectLevel('light')">😾 Kesel Dikit</button>
+                <button class="btn btn-medium" onclick="selectLevel('medium')">😿 Ngambek Berat</button>
+                <button class="btn btn-heavy" onclick="selectLevel('heavy')">🙀 Pengen Ngamuk!</button>
+            </div>
+        </div>
+
+        <!-- Response screen -->
+        <div class="response" id="responseScreen">
+            <div class="cat-container">
+                <div class="cat">😿</div>
+            </div>
+            <p class="response-text">
+                Ya ampun... <span class="highlight">Maaf yaa</span> 💕<br><br>
+                Biar keselnya hilang,<br>bantuin kucing ini olahraga yuk!
+            </p>
+            <button class="next-btn" onclick="goToGame()">Ayuk! 🐾</button>
+        </div>
+    </div>
+
+    <script>
+        // Floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            const emojis = ['💕', '💗', '💖', '🌸', '✨', '💫'];
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'heart';
+                heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (5 + Math.random() * 10) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // Meow sound (Web Audio API - no external file needed)
+        function playMeow() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            // Sad meow: descending pitch
+            osc.frequency.setValueAtTime(800, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.3);
+            osc.frequency.exponentialRampToValueAtTime(250, ctx.currentTime + 0.6);
+            
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.7);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.7);
+        }
+
+        function selectLevel(level) {
+            playMeow();
+            
+            const mainScreen = document.getElementById('mainScreen');
+            const responseScreen = document.getElementById('responseScreen');
+            
+            mainScreen.style.opacity = '0';
+            mainScreen.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                mainScreen.style.display = 'none';
+                responseScreen.style.display = 'block';
+                responseScreen.style.opacity = '0';
+                responseScreen.style.transition = 'opacity 0.5s ease';
+                
+                setTimeout(() => {
+                    responseScreen.style.opacity = '1';
+                }, 50);
+            }, 500);
+        }
+
+        function goToGame() {
+            // Placeholder - nanti redirect ke Bab 2 (game)
+            alert('🐱 Bab 2 coming soon! (Game kucing olahraga)');
+            // window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>
