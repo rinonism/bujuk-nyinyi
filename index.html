@@ -34,9 +34,11 @@
         }
 
         .cat {
-            font-size: 120px;
-            line-height: 1;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
         }
 
         .message {
@@ -217,7 +219,7 @@
         <!-- Main screen -->
         <div class="main-screen" id="mainScreen">
             <div class="cat-container">
-                <div class="cat">🐱</div>
+                <img class="cat" src="https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg" alt="Kucing sedih">
             </div>
             <p class="message">Aku tau aku salah...<br>Seberapa kesel kamu sama aku hari ini?</p>
             <div class="buttons">
@@ -230,7 +232,7 @@
         <!-- Response screen -->
         <div class="response" id="responseScreen">
             <div class="cat-container">
-                <div class="cat">😿</div>
+                <img class="cat" src="https://cdn.pixabay.com/photo/2019/11/08/11/36/kitten-4611189_640.jpg" alt="Kucing melas">
             </div>
             <p class="response-text">
                 Ya ampun... <span class="highlight">Maaf yaa</span> 💕<br><br>
