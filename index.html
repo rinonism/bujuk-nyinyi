@@ -165,6 +165,92 @@
             box-shadow: 0 6px 20px rgba(171,71,188,0.6);
         }
 
+        /* Game screen */
+        .game-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .game-cat {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .game-cat:active {
+            transform: scale(0.9);
+        }
+
+        .game-cat.happy {
+            animation: wiggle 0.5s ease;
+        }
+
+        .tap-counter {
+            margin-top: 1.2rem;
+            font-size: 1.2rem;
+            color: #4a4a4a;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 80%;
+            max-width: 280px;
+            height: 12px;
+            background: #eee;
+            border-radius: 20px;
+            margin: 1rem auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e53935, #ff8a65, #fff176, #81c784, #66bb6a);
+            border-radius: 20px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .game-msg {
+            font-size: 1.3rem;
+            color: #4a4a4a;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            min-height: 2.5rem;
+        }
+
+        /* Win screen */
+        .win-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .win-text {
+            font-size: 1.5rem;
+            color: #e91e63;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .win-sub {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.1); }
+            50% { transform: rotate(10deg) scale(1.1); }
+            75% { transform: rotate(-5deg) scale(1.05); }
+        }
+
         /* Floating hearts background */
         .hearts {
             position: fixed;
@@ -240,6 +326,27 @@
             </p>
             <button class="next-btn" onclick="goToGame()">Ayuk! 🐾</button>
         </div>
+
+        <!-- Game screen -->
+        <div class="game-screen" id="gameScreen">
+            <p class="game-msg" id="gameMsg">Tap kucingnya biar dia gak ngambek lagi! 🐾</p>
+            <div class="cat-container">
+                <img class="game-cat" id="gameCat" src="https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg" alt="Kucing ngambek" onclick="tapCat()">
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="tap-counter" id="tapCounter">0 / 20 sayang 💕</p>
+        </div>
+
+        <!-- Win screen -->
+        <div class="win-screen" id="winScreen">
+            <div class="cat-container">
+                <img class="cat" src="https://cdn.pixabay.com/photo/2019/11/08/11/36/kitten-4611189_640.jpg" alt="Kucing seneng">
+            </div>
+            <p class="win-text">Yeay! Kucingnya udah gak ngambek! 🎉💕<br><br>...kamu juga dong ya? 🥺</p>
+            <p class="win-sub">Maaf ya sayang, aku sayang kamu 💗</p>
+        </div>
     </div>
 
     <script>
@@ -304,9 +411,75 @@
         }
 
         function goToGame() {
-            // Placeholder - nanti redirect ke Bab 2 (game)
-            alert('🐱 Bab 2 coming soon! (Game kucing olahraga)');
-            // window.location.href = 'game.html';
+            const responseScreen = document.getElementById('responseScreen');
+            const gameScreen = document.getElementById('gameScreen');
+            
+            responseScreen.style.opacity = '0';
+            responseScreen.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                responseScreen.style.display = 'none';
+                gameScreen.style.display = 'block';
+                gameScreen.style.opacity = '0';
+                gameScreen.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => { gameScreen.style.opacity = '1'; }, 50);
+            }, 500);
+        }
+
+        // Game logic
+        let tapCount = 0;
+        const maxTaps = 20;
+        const catMoods = [
+            { at: 0, msg: "😾 Masih kesel nih...", img: "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg" },
+            { at: 5, msg: "😿 Hmm... dikit lagi...", img: "https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_640.jpg" },
+            { at: 10, msg: "🐱 Oke oke mulai luluh...", img: "https://cdn.pixabay.com/photo/2019/11/08/11/36/kitten-4611189_640.jpg" },
+            { at: 15, msg: "😺 Ahh hampir gak kesel lagi!", img: "https://cdn.pixabay.com/photo/2019/11/08/11/36/kitten-4611189_640.jpg" },
+        ];
+
+        function tapCat() {
+            if (tapCount >= maxTaps) return;
+            
+            tapCount++;
+            playMeow();
+            
+            // Wiggle animation
+            const cat = document.getElementById('gameCat');
+            cat.classList.remove('happy');
+            void cat.offsetWidth;
+            cat.classList.add('happy');
+
+            // Update progress
+            const progress = (tapCount / maxTaps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('tapCounter').textContent = tapCount + ' / ' + maxTaps + ' sayang 💕';
+
+            // Update mood
+            for (let i = catMoods.length - 1; i >= 0; i--) {
+                if (tapCount >= catMoods[i].at) {
+                    document.getElementById('gameMsg').textContent = catMoods[i].msg;
+                    cat.src = catMoods[i].img;
+                    break;
+                }
+            }
+
+            // Win!
+            if (tapCount >= maxTaps) {
+                setTimeout(() => {
+                    const gameScreen = document.getElementById('gameScreen');
+                    const winScreen = document.getElementById('winScreen');
+                    
+                    gameScreen.style.opacity = '0';
+                    gameScreen.style.transition = 'opacity 0.5s ease';
+                    
+                    setTimeout(() => {
+                        gameScreen.style.display = 'none';
+                        winScreen.style.display = 'block';
+                        winScreen.style.opacity = '0';
+                        winScreen.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => { winScreen.style.opacity = '1'; }, 50);
+                    }, 500);
+                }, 600);
+            }
         }
     </script>
 </body>
